@@ -15,15 +15,4 @@ app.use(cors());
 app.use('/api/auth', auth_routes);
 app.use('/api/comandas', comanda_routes);
 
-const iniciar = async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    console.log('Base de datos conectada - ok');
-    app.listen(SERVER_PORT, () => console.log(`Servidor corriendo`));
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-iniciar();
+export default app;
