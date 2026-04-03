@@ -12,24 +12,31 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/auth', auth_routes);
-app.use('/api/comandas', comanda_routes);
-
 // Ruta de prueba
 app.get('/', (req, res) => {
   res.json({ mensaje: 'API funcionando correctamente', version: '1.0.0' });
 });
 
+app.use('/api/auth', auth_routes);
+app.use('/api/comandas', comanda_routes);
+
+// Inicializar BD SIEMPRE (en desarrollo Y en Vercel)
 const iniciar = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
     console.log('Base de datos conectada - ok');
-    app.listen(SERVER_PORT, () => console.log(`Servidor corriendo`));
   } catch (e) {
-    console.error(e);
+    console.error('Error conectando BD:', e);
   }
 };
 
 iniciar();
 
+// Solo en desarrollo: escuchar en puerto local
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+}
+
+export default app;
