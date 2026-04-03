@@ -15,6 +15,11 @@ app.use(cors());
 app.use('/api/auth', auth_routes);
 app.use('/api/comandas', comanda_routes);
 
+// Ruta de prueba
+app.get('/', (req, res) => {
+  res.json({ mensaje: 'API funcionando correctamente', version: '1.0.0' });
+});
+
 const iniciar = async () => {
   try {
     await sequelize.authenticate();
